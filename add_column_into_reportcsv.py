@@ -3,7 +3,10 @@
 
 #Nankai University Information Security
 #QiuKF 1055419050@qq.com
-#add origin_name,length,analyze_time columns into reports.csv
+#add file_name,file_size,last_analysis_time  columns into reports.csv
+#if there is no file_name for a sample,replace its name by sha256
+#add time
+#Wait Tian's time.csv
 
 from multiprocessing import Process,Pool
 import os
@@ -21,13 +24,20 @@ def add_columns(first_dir):
   for each_dir in child_dir:
     try:
       reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'reports.csv')
+      #use in server:150
+      #reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'vt_report.csv')
     except Exception,e:
       print e,' in ',SAMPLES_PATH+each_dir+'reports.csv'
       continue
-    reports_pd['origin_name']=' '
-    reports_pd['analyze_time']=' '
-    reports_pd['length']=' '
+    reports_pd['file_name']=' '
+    reports_pd['file_size']=' '
+    reports_pd['last_analysis_time']=' '
+    #
+    reports_pd['time']=' '
+    #
     reports_pd=reports_pd.fillna(' ')
+    #
+    reports_pd=reports_pd[]
     reports_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
 
 def make_file_dir(first):
