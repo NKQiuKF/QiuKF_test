@@ -27,6 +27,7 @@ def add_columns(first_dir):
     reports_pd['origin_name']=' '
     reports_pd['analyze_time']=' '
     reports_pd['length']=' '
+    reports_pd=reports_pd.fillna(' ')
     reports_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
 
 def make_file_dir(first):
