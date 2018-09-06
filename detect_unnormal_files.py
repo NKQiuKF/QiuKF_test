@@ -23,10 +23,11 @@ def detect():
       for third_chr in third_level:
         files=os.listdir(SAMPLES_PATH+first_chr+'/'+second_chr+'/'+third_chr+'/')
         for each_file in files:
-          if not re.match(detect_pattern,each_file):
+          if not re.match(detect_pattern, each_file):
             print SAMPLES_PATH+first_chr+'/'+second_chr+'/'+third_chr+'/'+each_file
             unnormal_list.append(SAMPLES_PATH+first_chr+'/'+second_chr+'/'+third_chr+'/'+each_file)
-
+            file_rm = SAMPLES_PATH+first_chr+'/'+second_chr+'/'+third_chr+'/'+each_file
+            os.popen("rm -fr " + file_rm)
 
 if __name__=='__main__':
   detect()
