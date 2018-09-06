@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-
+import traceback
 import json
 import pandas as pd
 import multiprocessing as mp
@@ -16,28 +16,58 @@ columns = ['sha256','sha1','md5','type','scan_date','positives','Bkav','ahnlab',
            'Baidu-International','eScan','Zoner','Tencent','Yandex','Ikarus','eGambit','GData','AVG','Cybereason','Panda','CrowdStrike',\
            'Qihoo-360']
 
-def write_csv(dict_csv,file_path):
-
+def write_benign(dict_csv):
+    path_benign='/data/benign'
     try:
         prex = dict_csv['sha256'][0][:3]
     except Exception,e:
-    	print e
+    	print e,3
+        return
     	
-    #file_path = "{0}/{1}/{2}/{3}/{4}".format(path_benhd, prex[0],prex[1],prex[2],'vt_report.csv')
+    file_path = "{0}/{1}/{2}/{3}/{4}".format(path_benign, prex[0],prex[1],prex[2],'vt_report.csv')
     df = pd.DataFrame(dict_csv, columns = columns)
-    if os.path.exists(file_path):
-        df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = columns)
-    else:
-        df.to_csv(file_path, index=False, sep=',', mode='a', columns = columns) 
-
+    #file_path='/home/nkamg/Documents/test_benign.csv'
+    #print file_path
+    try:
+        if os.path.exists(file_path):
+    
+            df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = columns)
+        else:
+            df.to_csv(file_path, index=False, sep=',', mode='a', columns = columns) 
+    except Exception,e:
+        print e
+        return 
+def write_malware(dict_csv):
+    path_malware='/data/malware'
+    try:
+        prex = dict_csv['sha256'][0][:3]
+    except Exception,e:
+      #print e,2
+      return
+      
+    file_path = "{0}/{1}/{2}/{3}/{4}".format(path_malware, prex[0],prex[1],prex[2],'vt_report.csv')
+    df = pd.DataFrame(dict_csv, columns = columns)
+    #file_path='/home/nkamg/Documents/test_malware.csv'
+    try:
+        if os.path.exists(file_path):
+            df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = columns)
+        else:
+            df.to_csv(file_path, index=False, sep=',', mode='a', columns = columns) 
+    except Exception,e:
+        #print e
+        return
 def extract(file_name):
 
     malware_res = []
     benign_res = []
 
     json_file=open(file_name,'r')
-    temp=json.load(json_file)
-    json_file.close()
+    try:
+        temp=json.load(json_file)
+        json_file.close()
+    except Exception,e:
+        print file_name,'can not be visited.'
+        return
     #print json_data
     for each in temp:
         if not each:
@@ -70,24 +100,25 @@ def extract(file_name):
                 else:
                     dict_csv[i].append(' ')
         except Exception,e:
-            print temp[each]
-            print e
+            continue
         if label_flag==0:
             benign_res.append(dict_csv)
         else:
             malware_res.append(dict_csv)
     prex=file_name.split('.')[0]
     for each in malware_res:
-        write_csv(each,"m"+prex+".csv")
+        #pass
+        write_malware(each)
     for each in benign_res:
-        write_csv(each,"b"+prex+".csv")
+        #pass
+        write_benign(each)
 
 def process():
   base_dir='/data/result/'
   json_files=os.listdir(base_dir)
   for each in json_files:
-    extract(base_dir+each)
+      extract(base_dir+each)
 
   
 if __name__=='__main__':
-	main()
+    process()
