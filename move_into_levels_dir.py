@@ -4,6 +4,7 @@
 #Nankai University Information Security
 #QiuKF 1055419050@qq.com
 #move files from failed folder into malware three levels
+#The script is the frame of transport samples by multiprocess
 
 from multiprocessing import Process,Pool
 import os
