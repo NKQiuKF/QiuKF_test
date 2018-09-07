@@ -4,6 +4,7 @@
 #Nankai University Information Security
 #QiuKF 1055419050@qq.com
 #concat processed.csv and vt_report.csv into reports.csv
+#then delete vt_report.csv and processed.csv
 
 from multiprocessing import Process,Pool
 import os
