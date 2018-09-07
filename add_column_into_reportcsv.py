@@ -15,12 +15,14 @@ import time
 import sys
 import re
 
+#add three columns (file_name,file_size,time_stamp) into reports.csv
+#There are two function prepared for two Tinghua's server
+
 #SAMPLES_PATH='/data/malware/'
 SAMPLES_PATH='/data/benign/'
 
 #detect sample file by sha256
 # return is boolean
-
 def is_sample(file_name):
   detect_pattern='[0123456789abcdef]{64}$'
   
