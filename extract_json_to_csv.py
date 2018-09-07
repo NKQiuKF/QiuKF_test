@@ -1,4 +1,11 @@
-#-*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#Nankai University Information Security
+#QiuKF 1055419050@qq.com
+#distribute vt_json by its /sha256[0]/sha256[1]/sha256[2] into three levels folder
+
+
 import traceback
 import json
 import pandas as pd
