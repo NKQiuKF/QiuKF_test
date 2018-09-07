@@ -3,9 +3,7 @@
 
 #Nankai University Information Security
 #QiuKF 1055419050@qq.com
-#get file results at fixed time
-#create processed.csv at sub dirctories
-#create Total_File_Data.csv at /collection
+#concat processed.csv and vt_report.csv into reports.csv
 
 from multiprocessing import Process,Pool
 import os
@@ -44,7 +42,7 @@ def merge_two_csv(first_dir):
       out =pd.merge(processed_df,vt_report_df,how='outer',on=['sha256'])
       out =out.sort_values(by=['sha256'])
       out =out.fillna(' ')
-      out.to_csv(SAMPLES_PATH+each_dir+'report.csv',index=False)
+      out.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
       #os.popen('rm -f '+SAMPLES_PATH+each_dir+'processed.csv')
       #os.popen('rm -f '+SAMPLES_PATH+each_dir+'vt_report.csv')
 
