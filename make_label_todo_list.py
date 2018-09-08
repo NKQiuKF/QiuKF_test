@@ -35,30 +35,34 @@ def create_all_path():
   tmp_path=''
   chr_list=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
   for first_level in chr_list:
-    tmp_path=first_level
+    
+    first_path=first_level
     for second_level in chr_list:
-      tmp_path=tmp_path+'/'+second_level
+      sencond_path=first_path+'/'+second_level
       for third_level in chr_list:
-        tmp_path=tmp_path+'/'+third_level+'/'
-        ret.append(tmp_path)
+        third_path=sencond_path+'/'+third_level+'/'
+        #print tmp_path
+        ret.append(third_path)
+  #print ret
   return ret
-
 
 def write_todo_list(path_list):
   for each in path_list:
+    print each
     #backup
     #files_list=os.listdir(each)
     #sample_files=select_samples_from_list(files_list)
     #backup
     #if scan_date is a space , suppose that there is no label for the sha256
     try:    
-      reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'reports.csv')
-    except Exception,e
-      print e,' in ',SAMPLES_PATH+each_dir+'reports.csv'
+      reports_pd=pd.read_csv(SAMPLES_PATH+each+'reports.csv')
+    except Exception,e:
+      print e,' in ',SAMPLES_PATH+each+'reports.csv'
       continue
     need_label_pd=reports_pd[(reports_pd['scan_date']==' ')|(reports_pd['scan_date']=='')]
     need_label_pd=need_label_pd['sha256']
     need_label_pd.to_csv(LABEL_TODO_LIST_PATH,index=False, sep=',', mode='a', header=False)
+    print SAMPLES_PATH+each+'reports.csv','completed'
   
 def main():
   all_subdir_path=create_all_path()
