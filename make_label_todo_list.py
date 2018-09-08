@@ -12,8 +12,8 @@ import time
 import sys
 import re
 
-#SAMPLES_PATH='/data/malware/'
-SAMPLES_PATH='/data/benign/'
+SAMPLES_PATH='/data/malware/'
+#SAMPLES_PATH='/data/benign/'
 LABEL_TODO_LIST_PATH='/home/nkamg/QiuKF_test/label_todo_list.csv'
 
 total_label_todo_list=[]
