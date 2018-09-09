@@ -7,16 +7,17 @@
 #record incorrect samples
 
 import re
-from multiprocessing import Process,Pool
+from multiprocessing import Process,Pool,Lock
 import os
 import pandas as pd
 import time
 import sys
 
-
-
 SAMPLES_PATH='/data/malware/'
+DELETED_SAMPLES_SHA256='/home/nkamg/QiuKF_test/sha256_uncorrect_list.csv'
+DIR_CHR=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 #SAMPLES_PATH='/data/benign/'
+lock=Lock()
 def get_sample_sha256(sample_path):
   
   #sample_path must be abs path
@@ -40,18 +41,25 @@ def check_sha256(first_dir):
     for each_file in files:
       if re.match(detect_pattern, each_file):
         #print each_dir+each_file
-        if each_file!=get_sample_sha256(SAMPLES_PATH+each_dir+each_file):
-          print SAMPLES_PATH+each_dir+each_file
+        correct_sha256=get_sample_sha256(SAMPLES_PATH+each_dir+each_file)
+        if each_file!=correct_sha256:
+          print SAMPLES_PATH+each_dir+each_file,' correct: ',correct_sha256
           incorrect_sha256_samples.append(SAMPLES_PATH+each_dir+each_file)
+          os.popen('rm '+SAMPLES_PATH+each_dir+each_file)
   print incorrect_sha256_samples
+  tmp_pd=pd.DataFrame(incorrect_sha256_samples)
+  lock.arquire()
+  tmp_pd.to_csv(DELETED_SAMPLES_SHA256,mode='a',header=False,index=False)
+  lock.release()
+
 
 def make_file_dir(first):
   ret=[]
-  chr_list=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+  
   tmp=''
-  for second in chr_list:
+  for second in DIR_CHR:
     two='/'+second
-    for third in chr_list:
+    for third in DIR_CHR:
       three=two+'/'+third+'/'
       ret.append(first+three)
   return ret
@@ -60,9 +68,9 @@ def make_file_dir(first):
 def main():
   
   print('Parent process %s.' %os.getpid())
-  first_dir=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+
   p=Pool(16)
-  for each in first_dir:
+  for each in DIR_CHR:
     p.apply_async(check_sha256,args=(each,))
   p.close()
   p.join()
