@@ -16,7 +16,6 @@ SAMPLES_PATH='/data/malware/'
 #SAMPLES_PATH='/data/benign/'
 LABEL_TODO_LIST_PATH='/home/nkamg/QiuKF_test/label_todo_list.csv'
 
-total_label_todo_list=[]
 
 #back up the function ,Supposed it will be used in future
 def is_sample(file_name):

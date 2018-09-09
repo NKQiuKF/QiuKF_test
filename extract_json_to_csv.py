@@ -13,7 +13,7 @@ import multiprocessing as mp
 import os
 import sys
 
-columns = ['sha256','sha1','md5','type','scan_date','positives','Bkav','ahnlab','TotalDefense','MicroWorld-eScan','nProtect','CMC','CAT-QuickHeal',\
+COLUMNS = ['sha256','sha1','md5','type','scan_date','positives','Bkav','ahnlab','TotalDefense','MicroWorld-eScan','nProtect','CMC','CAT-QuickHeal',\
            'eTrust-Vet','McAfee','Malwarebytes','VIPRE','Prevx','Paloalto','TheHacker','BitDefender','K7GW','K7AntiVirus','Invincea',\
            'Baidu','Agnitum','F-Prot','SymantecMobileInsight','Symantec','Norman','ESET-NOD32','TrendMicro-HouseCall','Avast','eSafe',\
            'ClamAV','Kaspersky','Alibaba','NANO-Antivirus','ViRobot','AegisLab','ByteHero','Rising','Ad-Aware','Trustlook','Sophos',\
@@ -32,15 +32,15 @@ def write_benign(dict_csv):
         return
     	
     file_path = "{0}/{1}/{2}/{3}/{4}".format(path_benign, prex[0],prex[1],prex[2],'vt_report.csv')
-    df = pd.DataFrame(dict_csv, columns = columns)
+    df = pd.DataFrame(dict_csv, columns = COLUMNS)
     #file_path='/home/nkamg/Documents/test_benign.csv'
     #print file_path
     try:
         if os.path.exists(file_path):
     
-            df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = columns)
+            df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = COLUMNS)
         else:
-            df.to_csv(file_path, index=False, sep=',', mode='a', columns = columns) 
+            df.to_csv(file_path, index=False, sep=',', mode='a', columns =COLUMNS) 
     except Exception,e:
         print e
         return 
@@ -53,13 +53,13 @@ def write_malware(dict_csv):
       return
       
     file_path = "{0}/{1}/{2}/{3}/{4}".format(path_malware, prex[0],prex[1],prex[2],'vt_report.csv')
-    df = pd.DataFrame(dict_csv, columns = columns)
+    df = pd.DataFrame(dict_csv, columns = COLUMNS)
     #file_path='/home/nkamg/Documents/test_malware.csv'
     try:
         if os.path.exists(file_path):
-            df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = columns)
+            df.to_csv(file_path, index=False, sep=',', mode='a', header=False, columns = COLUMNS)
         else:
-            df.to_csv(file_path, index=False, sep=',', mode='a', columns = columns) 
+            df.to_csv(file_path, index=False, sep=',', mode='a', columns = COLUMNS) 
     except Exception,e:
         #print e
         return
@@ -97,7 +97,7 @@ def extract(file_name):
             dict_csv['scan_date'].append(temp[each]['scan_date'])                        
             dict_csv['positives'].append(temp[each]['positives'])
             dict_csv['type'].append('exe/html')
-            for i in columns[6:]:
+            for i in COLUMNS[6:]:
                 if i in temp[each]['scans'].keys():
                     if temp[each]['scans'][i]['result'] == None:
                         dict_csv[i].append(' ')
