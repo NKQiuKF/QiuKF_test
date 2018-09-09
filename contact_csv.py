@@ -13,20 +13,22 @@ import time
 import sys
 
 SAMPLES_PATH='/data/malware/'
+DIR_CHR=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 #samples_path='/data/malware/collection/'
 #<--------not use the function in this script-------->
+#merge reports.csv from all sub directory ,for statistic
 def merge_report():
   
   data = {"sha256":[],"type":[]}
   total_df=pd.DataFrame(data)
-  chr=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
-  for first in chr:
+ 
+  for first in DIR_CHR:
     sub_dir_list=make_file_dir(first)
     for each in sub_dir_list:
-      sub_pd=pd.read_csv(SAMPLES_PATH+each+'report.csv')
+      sub_pd=pd.read_csv(SAMPLES_PATH+each+'reports.csv')
       total=[total_df,sub_pd]
       total_df=pd.concat(total)
-      print 'concat '+each+'report.csv'
+      print 'concat '+each+'reports.csv'
   total_df.to_csv('/data/Total_File_Data(QiuKF).csv',index=False)
 #<------------------------------------------------------->
 def merge_two_csv(first_dir):
@@ -54,11 +56,11 @@ def merge_two_csv(first_dir):
     
 def make_file_dir(first):
   ret=[]
-  chr_list=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+  
   tmp=''
-  for second in chr_list:
+  for second in DIR_CHR:
     two='/'+second
-    for third in chr_list:
+    for third in DIR_CHR:
       three=two+'/'+third+'/'
       ret.append(first+three)
   return ret
@@ -68,9 +70,9 @@ def main():
   #print SAMPLES_PATH
   print('Parent process %s.' %os.getpid())
   #dic_list=make_file_dir()
-  first_dic=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+  
   p=Pool(16)
-  for each in first_dic:
+  for each in DIR_CHR:
     p.apply_async(merge_two_csv,args=(each,))
   p.close()
   p.join()
