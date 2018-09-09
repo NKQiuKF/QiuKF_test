@@ -19,8 +19,8 @@ import re
 #rename reports.csv  as reports_future.csv
 #create reports.csv only contains samples info with its label
 
-MALWARE_PATH='/data/malware/'
-BENIGN_PATH='/data/benign/'
+#SAMPLES_PATH='/data/malware/'
+SAMPLES_PATH='/data/benign/'
 
 
 def clean_reports(first_dir):
@@ -39,9 +39,9 @@ def clean_reports(first_dir):
     #clean lines which sha256 column is't sha256
     filter_pd=reports_pd[~reports_pd.sha256.str.contains('\.')]
     filter_pd.to_csv(SAMPLES_PATH+each_dir+'reports_future.csv',index=False)
-
-    tjw_need=filter_pd[~filter_pd['scan_date']==' ']
+    tjw_need=filter_pd[~(filter_pd['scan_date']==' ')]
     tjw_need.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
+    print SAMPLES_PATH+each_dir,' completed'
 
 def make_file_dir(first):
   ret=[]
