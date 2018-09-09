@@ -3,10 +3,6 @@
 
 #Nankai University Information Security
 #QiuKF 1055419050@qq.com
-#add file_name,file_size,last_analysis_time  columns into reports.csv
-#if there is no file_name for a sample,replace its name by sha256
-#add time
-#Wait Tian's time.csv
 
 from multiprocessing import Process,Pool
 import os
@@ -38,9 +34,7 @@ def clean_reports(first_dir):
       continue
     #clean lines which sha256 column is't sha256
     filter_pd=reports_pd[~reports_pd.sha256.str.contains('\.')]
-    filter_pd.to_csv(SAMPLES_PATH+each_dir+'reports_future.csv',index=False)
-    tjw_need=filter_pd[~(filter_pd['scan_date']==' ')]
-    tjw_need.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
+    filter_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
     print SAMPLES_PATH+each_dir,' completed'
 
 def make_file_dir(first):
