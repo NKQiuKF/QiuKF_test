@@ -12,8 +12,7 @@ import sys
 import re
 
 #clean the reports.csv in every sub dirctory 
-#rename reports.csv  as reports_future.csv
-#create reports.csv only contains samples info with its label
+#because their some sha256.data sha256.xml in reports's sha256 column
 
 #SAMPLES_PATH='/data/malware/'
 SAMPLES_PATH='/data/benign/'
