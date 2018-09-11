@@ -136,7 +136,7 @@ def get_label(sha256):
     return response.json()
   raise Exception('response_code is not 200')
 def move_samples_into_benign(sha256):
-  cmd='mv '+MALWARE_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'+sha256+'   '+BENIGN_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'
+  cmd='mv '+MALWARE_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'+sha256+'*'+'   '+BENIGN_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'
   os.popen(cmd)
   print cmd
 def pack_json(origin_json):
