@@ -137,8 +137,8 @@ def get_label(sha256):
   raise Exception('response_code is not 200')
 def move_samples_into_benign(sha256):
   cmd='mv '+MALWARE_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'+sha256+'   '+BENIGN_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'
-  #os.popen(cmd)
-  #print cmd
+  os.popen(cmd)
+  print cmd
 def pack_json(origin_json):
   json_dict={}
   json_dict[origin_json['sha256']]=origin_json
@@ -202,7 +202,7 @@ def main():
     also_need_label_list.remove(sha256)
     new_list=pd.DataFrame(also_need_label_list)
     new_list.to_csv(LABEL_TODO_LIST,index=False,header=False)
-    print 'completed ',sha256,4
+    print 'completed ',sha256,malicious_flag
   
 
 if __name__=='__main__':
