@@ -41,7 +41,7 @@ def get_file(first_dir):
         print 'no '+each
         ret_list.append(' ')
     reports_pd['type_x']=ret_list
-    reports_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False).
+    reports_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
     print SAMPLES_PATH+each_dir,' completed'
 
 def make_file_dir(first):
