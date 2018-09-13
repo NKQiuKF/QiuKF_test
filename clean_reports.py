@@ -32,7 +32,7 @@ def clean_reports(first_dir):
       print e,' in ',SAMPLES_PATH+each_dir+'reports.csv'
       continue
     #clean lines which sha256 column is't sha256
-    filter_pd=reports_pd[~reports_pd.sha256.str.contains('\.')]
+    filter_pd=reports_pd[~reports_pd.md5.str.contains('apk')]
     filter_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
     print SAMPLES_PATH+each_dir,' completed'
 
