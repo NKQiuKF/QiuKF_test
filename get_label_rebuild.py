@@ -76,7 +76,7 @@ API_KEYS = ['15b87efcbe3b10c9674ad9e312e2b3c9820316a4532c5afb561f6f7922f4331a',
             'd96b13916aab4931a6fb36ac2b934c552b03a1f25b045a798cf446e4175da04d'
               ]
 '''
-COLUMNS = ['sha256','sha1','md5','type','scan_date','positives','Bkav','ahnlab','TotalDefense','MicroWorld-eScan','nProtect','CMC','CAT-QuickHeal',\
+COLUMNS = ['sha256','type_x','sha1','md5','type_y','scan_date','positives','Bkav','ahnlab','TotalDefense','MicroWorld-eScan','nProtect','CMC','CAT-QuickHeal',\
            'eTrust-Vet','McAfee','Malwarebytes','VIPRE','Prevx','Paloalto','TheHacker','BitDefender','K7GW','K7AntiVirus','Invincea',\
            'Baidu','Agnitum','F-Prot','SymantecMobileInsight','Symantec','Norman','ESET-NOD32','TrendMicro-HouseCall','Avast','eSafe',\
            'ClamAV','Kaspersky','Alibaba','NANO-Antivirus','ViRobot','AegisLab','ByteHero','Rising','Ad-Aware','Trustlook','Sophos',\
@@ -85,7 +85,7 @@ COLUMNS = ['sha256','sha1','md5','type','scan_date','positives','Bkav','ahnlab',
            'ZoneAlarm','Avast-Mobile','Microsoft','Commtouch','AhnLab-V3','ALYac','AVware','MAX','VBA32','Cylance','WhiteArmor',\
            'Baidu-International','eScan','Zoner','Tencent','Yandex','Ikarus','eGambit','GData','AVG','Cybereason','Panda','CrowdStrike',\
            'Qihoo-360']
-EXTENDED_COLUMNS = ['sha256','sha1','md5','type','scan_date','positives','Bkav','ahnlab','TotalDefense','MicroWorld-eScan','nProtect','CMC','CAT-QuickHeal',\
+EXTENDED_COLUMNS = ['sha256','type_x','sha1','md5','type_y','scan_date','positives','Bkav','ahnlab','TotalDefense','MicroWorld-eScan','nProtect','CMC','CAT-QuickHeal',\
            'eTrust-Vet','McAfee','Malwarebytes','VIPRE','Prevx','Paloalto','TheHacker','BitDefender','K7GW','K7AntiVirus','Invincea',\
            'Baidu','Agnitum','F-Prot','SymantecMobileInsight','Symantec','Norman','ESET-NOD32','TrendMicro-HouseCall','Avast','eSafe',\
            'ClamAV','Kaspersky','Alibaba','NANO-Antivirus','ViRobot','AegisLab','ByteHero','Rising','Ad-Aware','Trustlook','Sophos',\
@@ -174,7 +174,7 @@ def write_json_to_reports(packed_json,dst_path):
     sha256=packed_json[each]['sha256']
     dict_csv['type_x'].append(file_cmd_ret(MALWARE_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'+sha256))
     dict_csv['type_y'].append('apk')
-    for i in COLUMNS[6:]:
+    for i in COLUMNS[7:]:
       if i in packed_json[each]['scans'].keys():
         if packed_json[each]['scans'][i]['result'] == None:
           dict_csv[i].append(' ')
@@ -206,7 +206,7 @@ def main():
     else:
       write_json_to_reports(packed_json,BENIGN_PATH)
       move_samples_into_benign(sha256)
-    time.sleep(1)
+    time.sleep(0.5)
     #except Exception,e:
     #  time.sleep(3)
     #  print e,3
