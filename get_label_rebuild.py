@@ -143,9 +143,20 @@ def pack_json(origin_json):
   json_dict={}
   json_dict[origin_json['sha256']]=origin_json
   return json_dict
+
+def file_cmd_ret(abs_path):
+  file_cmd=os.popen("file "+abs_path)
+  file_ret=file_cmd.read()
+  processed_ret=file_ret[file_ret.index(':')+2:file_ret.index('\n')]
+  if 'cannot open' in processed_ret:
+    return ' '
+  return processed_ret
+  #file_cmd.read() return e.g. 
+  #'3edff642fcd311d66c6f400f924700d606bb1cd5de1de3565ba99fc83b207636: Java archive data (JAR)\n'
+
 def write_json_to_reports(packed_json,dst_path):
   for each in packed_json:
-    dict_csv = { 'sha256':[],'sha1':[],'md5':[],'type':[],'scan_date':[],'positives':[],'ahnlab':[],'TotalDefense':[],'MicroWorld-eScan':[],'nProtect':[],\
+    dict_csv = { 'sha256':[],'type_x':[],'sha1':[],'md5':[],'type_y':[],'scan_date':[],'positives':[],'ahnlab':[],'TotalDefense':[],'MicroWorld-eScan':[],'nProtect':[],\
                'CMC':[],'CAT-QuickHeal':[],'eTrust-Vet':[],'McAfee':[],'Malwarebytes':[],'VIPRE':[],'Prevx':[],'Paloalto':[],'TheHacker':[],\
                'BitDefender':[],'K7GW':[],'K7AntiVirus':[],'Invincea':[],'Baidu':[],'Agnitum':[],'F-Prot':[],'SymantecMobileInsight':[],'Symantec':[],\
                'Norman':[],'ESET-NOD32':[],'TrendMicro-HouseCall':[],'Avast':[],'eSafe':[],'ClamAV':[],'Kaspersky':[],'Alibaba':[],'NANO-Antivirus':[],\
@@ -160,7 +171,9 @@ def write_json_to_reports(packed_json,dst_path):
     dict_csv['md5'].append(packed_json[each]['md5'])                                    
     dict_csv['scan_date'].append(packed_json[each]['scan_date'])                        
     dict_csv['positives'].append(packed_json[each]['positives'])
-    dict_csv['type'].append('apk')
+    sha256=packed_json[each]['sha256']
+    dict_csv['type_x'].append(file_cmd_ret(MALWARE_PATH+'/'+sha256[0]+'/'+sha256[1]+'/'+sha256[2]+'/'+sha256))
+    dict_csv['type_y'].append('apk')
     for i in COLUMNS[6:]:
       if i in packed_json[each]['scans'].keys():
         if packed_json[each]['scans'][i]['result'] == None:
