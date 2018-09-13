@@ -59,6 +59,8 @@ def file_cmd_ret(abs_path):
   file_cmd=os.popen("file "+abs_path)
   file_ret=file_cmd.read()
   processed_ret=file_ret[file_ret.index(':')+2:file_ret.index('\n')]
+  if 'cannot open' in processed_ret:
+    return ' '
   return processed_ret
   #file_cmd.read() return e.g. 
   #'3edff642fcd311d66c6f400f924700d606bb1cd5de1de3565ba99fc83b207636: Java archive data (JAR)\n'
