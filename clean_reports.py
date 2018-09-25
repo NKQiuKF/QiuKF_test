@@ -17,8 +17,8 @@ import re
 #SAMPLES_PATH='/data/malware/'
 SAMPLES_PATH='/data/benign/'
 
-def filter_comma(first_dir):
-  origin_file=open(SAMPLES_PATH+each_dir+'reports.csv','r')
+def exe_filter(reports_path):
+  origin_file=open(reports_path,'r')
   origin_data=origin_file.readlines()
   origin_file.close()
   ret=[]
@@ -29,8 +29,8 @@ def filter_comma(first_dir):
       second_index=each_line.index('"',first_index+1)
       comma_index=each_line.index(',',first_index+1,second_index)
       tmp[comma_index]='-'
-      print each_line[comma_index]
-      print each_line[first_index:second_index+1]
+      #print each_line[comma_index]
+      #print each_line[first_index:second_index+1]
 
       third_index=each_line.index('"',second_index+1)
       fouth_index=each_line.index('"',third_index+1)
@@ -49,9 +49,26 @@ def filter_comma(first_dir):
     ret.append(tmp)
 
     #print each_line
-  out=open(SAMPLES_PATH+each_dir+'reports.csv','w')
+  out=open(reports_path,'w')
   out.writelines(ret)
   out.close()
+
+def filter_comma(first_dir):
+
+  print 'Run task %s (%s)...' % (first_dir, os.getpid())
+  child_dir=make_file_dir(first_dir)
+  for each_dir in child_dir:
+    try:
+      exe_filter(SAMPLES_PATH+each_dir+'reports.csv')
+      #use in server:150
+      #reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'vt_report.csv')
+    except Exception,e:
+
+      print e,' in ',SAMPLES_PATH+each_dir+'reports.csv'
+      continue
+    #clean lines which sha256 column is't sha256
+    #filter_pd=reports_pd[~reports_pd.md5.str.contains('apk')]
+    print SAMPLES_PATH+each_dir,' completed'
 
 def clean_reports(first_dir):
 
