@@ -17,6 +17,41 @@ import re
 #SAMPLES_PATH='/data/malware/'
 SAMPLES_PATH='/data/benign/'
 
+def filter_comma(first_dir):
+  origin_file=open(SAMPLES_PATH+each_dir+'reports.csv','r')
+  origin_data=origin_file.readlines()
+  origin_file.close()
+  ret=[]
+  for each_line in origin_data:
+    tmp=list(each_line)
+    try:
+      first_index=each_line.index('"')
+      second_index=each_line.index('"',first_index+1)
+      comma_index=each_line.index(',',first_index+1,second_index)
+      tmp[comma_index]='-'
+      print each_line[comma_index]
+      print each_line[first_index:second_index+1]
+
+      third_index=each_line.index('"',second_index+1)
+      fouth_index=each_line.index('"',third_index+1)
+      comma_index=each_line.index(',',third_index+1,fouth_index)
+      tmp[comma_index]='-'
+
+      fifth_index=each_line.index('"',fouth_index+1)
+      sixth_index=each_line.index('"',fifth_index+1)
+      comma_index=each_line.index(',',fifth_index+1,sixth_index)
+      tmp[comma_index]='-'
+      #print each_line[third_index:fouth_index+1]
+
+    except Exception,e:
+      print e
+    tmp=''.join(tmp)
+    ret.append(tmp)
+
+    #print each_line
+  out=open(SAMPLES_PATH+each_dir+'reports.csv','w')
+  out.writelines(ret)
+  out.close()
 
 def clean_reports(first_dir):
 
@@ -53,7 +88,7 @@ def main():
   first_dic=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
   p=Pool(16)
   for each in first_dic:
-    p.apply_async(clean_reports,args=(each,))
+    p.apply_async(filter_comma,args=(each,))
   p.close()
   p.join()
 
