@@ -150,7 +150,7 @@ def file_cmd_ret(abs_path):
   processed_ret=file_ret[file_ret.index(':')+2:file_ret.index('\n')]
   if 'cannot open' in processed_ret:
     return ' '
-  return processed_ret
+  return processed_ret.replace(',','-')
   #file_cmd.read() return e.g. 
   #'3edff642fcd311d66c6f400f924700d606bb1cd5de1de3565ba99fc83b207636: Java archive data (JAR)\n'
 
@@ -179,7 +179,7 @@ def write_json_to_reports(packed_json,dst_path):
         if packed_json[each]['scans'][i]['result'] == None:
           dict_csv[i].append(' ')
         else:
-          dict_csv[i].append(packed_json[each]['scans'][i]['result'])
+          dict_csv[i].append((packed_json[each]['scans'][i]['result']).replace(',','-'))
       else:
         dict_csv[i].append(' ')
   write_action(dict_csv,dst_path)
@@ -198,6 +198,10 @@ def main():
     try:
       malicious_flag=response_label['positives']
     except Exception,e:
+      if 'positive' in e:
+        also_need_label_list.remove(sha256)
+        new_list=pd.DataFrame(also_need_label_list)
+        new_list.to_csv(LABEL_TODO_LIST,index=False,header=False)
       print e,'in',sha256
       continue
     packed_json=pack_json(response_label)
@@ -206,7 +210,7 @@ def main():
     else:
       write_json_to_reports(packed_json,BENIGN_PATH)
       move_samples_into_benign(sha256)
-    time.sleep(0.5)
+    time.sleep(2)
     #except Exception,e:
     #  time.sleep(3)
     #  print e,3
