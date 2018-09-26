@@ -14,8 +14,8 @@ import re
 #clean the reports.csv in every sub dirctory 
 #because their some sha256.data sha256.xml in reports's sha256 column
 
-#SAMPLES_PATH='/data/malware/'
-SAMPLES_PATH='/data/benign/'
+MALWARE_PATH='/data/malware/'
+BENIGN_PATH='/data/benign/'
 
 def exe_filter(reports_path):
   origin_file=open(reports_path,'r')
@@ -44,7 +44,8 @@ def exe_filter(reports_path):
       #print each_line[third_index:fouth_index+1]
 
     except Exception,e:
-      print e
+      pass
+      #print e
     tmp=''.join(tmp)
     ret.append(tmp)
 
@@ -53,22 +54,39 @@ def exe_filter(reports_path):
   out.writelines(ret)
   out.close()
 
-def filter_comma(first_dir):
+def filter_comma_malware(first_dir):
 
   print 'Run task %s (%s)...' % (first_dir, os.getpid())
   child_dir=make_file_dir(first_dir)
   for each_dir in child_dir:
     try:
-      exe_filter(SAMPLES_PATH+each_dir+'reports.csv')
+      exe_filter(MALWARE_PATH+each_dir+'reports.csv')
       #use in server:150
       #reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'vt_report.csv')
     except Exception,e:
 
-      print e,' in ',SAMPLES_PATH+each_dir+'reports.csv'
+      print e,' in ',MALWARE_PATH+each_dir+'reports.csv'
       continue
     #clean lines which sha256 column is't sha256
     #filter_pd=reports_pd[~reports_pd.md5.str.contains('apk')]
-    print SAMPLES_PATH+each_dir,' completed'
+    print MALWARE_PATH+each_dir,' completed'
+
+def filter_comma_benign(first_dir):
+
+  print 'Run task %s (%s)...' % (first_dir, os.getpid())
+  child_dir=make_file_dir(first_dir)
+  for each_dir in child_dir:
+    try:
+      exe_filter(BENIGN_PATH+each_dir+'reports.csv')
+      #use in server:150
+      #reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'vt_report.csv')
+    except Exception,e:
+
+      print e,' in ',BENIGN_PATH+each_dir+'reports.csv'
+      continue
+    #clean lines which sha256 column is't sha256
+    #filter_pd=reports_pd[~reports_pd.md5.str.contains('apk')]
+    print BENIGN_PATH+each_dir,' completed'
 
 def clean_reports(first_dir):
 
@@ -105,7 +123,8 @@ def main():
   first_dic=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
   p=Pool(16)
   for each in first_dic:
-    p.apply_async(filter_comma,args=(each,))
+    p.apply_async(filter_comma_benign,args=(each,))
+    p.apply_async(filter_comma_malware,args=(each,))
   p.close()
   p.join()
 
