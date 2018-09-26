@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import pandas as pd
 #Nankai University Information Security
 #QiuKF 1055419050@qq.com
 #find intersection from all_labels and all_datas
@@ -15,15 +15,18 @@ def main():
   #filter '1.0'
   benign_df=benign_df[benign_df['positives']!='1.0']
   benign_label_sha256=benign_df['sha256']
-  benign_list=list(benign_label_sha256)
-  data_list=list(data_sha256)
+  print 'positives0',len(list(benign_label_sha256))
+  benign_list=set(list(benign_label_sha256))
+  data_list=set(list(data_sha256))
 
-  positives0=list(set(benign_list).intersection(set(data_list)))
+  positives0=list(benign_list&data_list)
 
   malware_df=pd.read_csv('Total_File_Data(malware).csv')
   tmp1=malware_df[malware_df['positives']=='1']
   tmp2=malware_df[malware_df['positives']=='1.0']
   positives1=list(tmp1['sha256'])+list(tmp2['sha256'])
+  print 'positives1',len(positives1)
+
   #set(['42', '35.0', '52.0', '7.0', '12.0', 
   #'6.0', '37.0', '50.0', '24', ' ', '26', '27', '20', '21', 
   #'22', '23', '28', '29', '0', '4', '44.0', '16.0', '8', '45.0', 
@@ -42,9 +45,10 @@ def main():
   malware_df=malware_df[malware_df['positives']!='1']
   malware_df=malware_df[malware_df['positives']!='1.0']
   malware_df=malware_df[malware_df['positives']!='positives']
-  malware_list=list(malware_df['sha256'])
+  print 'positives2',len(list(malware_df['sha256']))
+  malware_list=set(list(malware_df['sha256']))
 
-  positives2=list(set(malware_list).intersection(set(data_list)))
+  positives2=list(malware_list&data_list)
 
   out=open('positives0','w')
   out.writelines('\n'.join(positives0))
