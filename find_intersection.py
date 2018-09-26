@@ -17,10 +17,12 @@ def main():
   benign_label_sha256=benign_df['sha256']
   print 'positives0',len(list(benign_label_sha256))
   benign_list=set(list(benign_label_sha256))
-  data_list=set(list(data_sha256))
+  print len(benign_list)
+  data_list=set(list(data_sha256['sha256']))
+  print len(data_list)
 
   positives0=list(benign_list&data_list)
-
+  print 'positives0,data',len(positives0)
   malware_df=pd.read_csv('Total_File_Data(malware).csv')
   tmp1=malware_df[malware_df['positives']=='1']
   tmp2=malware_df[malware_df['positives']=='1.0']
