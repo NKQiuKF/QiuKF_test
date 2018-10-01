@@ -94,18 +94,22 @@ def clean_reports(first_dir):
   child_dir=make_file_dir(first_dir)
   for each_dir in child_dir:
     try:
-      reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'reports.csv')
-      reports_pd.drop_duplicates('sha256','last',inplace=True)
+      reports_pd=pd.read_csv(BENIGN_PATH+each_dir+'reports.csv')
+      child_pd1=reports_pd[reports_pd['positives']==' ']
+      child_pd2=reports_pd[reports_pd['positives']=='0.0']
+      child_pd3=reports_pd[reports_pd['positives']=='0']
+      reports_pd=pd.concat([child_pd1,child_pd2,child_pd3])
+      #reports_pd.drop_duplicates('sha256','last',inplace=True)
       #use in server:150
       #reports_pd=pd.read_csv(SAMPLES_PATH+each_dir+'vt_report.csv')
     except Exception,e:
 
-      print e,' in ',SAMPLES_PATH+each_dir+'reports.csv'
+      print e,' in ',BENIGN_PATH+each_dir+'reports.csv'
       continue
     #clean lines which sha256 column is't sha256
     #filter_pd=reports_pd[~reports_pd.md5.str.contains('apk')]
-    filter_pd.to_csv(SAMPLES_PATH+each_dir+'reports.csv',index=False)
-    print SAMPLES_PATH+each_dir,' completed'
+    reports_pd.to_csv(BENIGN_PATH+each_dir+'reports.csv',index=False)
+    print BENIGN_PATH+each_dir,' completed'
 
 def make_file_dir(first):
   ret=[]
@@ -123,8 +127,8 @@ def main():
   first_dic=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
   p=Pool(16)
   for each in first_dic:
-    p.apply_async(filter_comma_benign,args=(each,))
-    p.apply_async(filter_comma_malware,args=(each,))
+    p.apply_async(clean_reports,args=(each,))
+    #p.apply_async(filter_comma_malware,args=(each,))
   p.close()
   p.join()
 
